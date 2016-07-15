@@ -1,0 +1,26 @@
+svg {
+    background-color: $backgroundColor;
+}
+
+#title {
+    font-size: 2.5em;
+}
+
+.tick,
+text,
+path {
+    fill: white;
+}
+
+line {
+    display:none;
+}
+
+text{
+    font-weight:bold;
+    font-size: 1.5em;
+}
+
+.label {
+    font-size: 2em;
+}
