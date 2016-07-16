@@ -1,5 +1,10 @@
 body {
     background-image: url(../images/worldmap.jpg);
+
+    -webkit-user-select: none;  
+    -moz-user-select: none;     
+    -ms-user-select: none;      
+    user-select: none;   
 }
 #container {
     text-align: center;

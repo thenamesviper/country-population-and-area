@@ -16,14 +16,45 @@ let xScale = d3.scaleLog()
 let yScale = d3.scaleLog()    
     .range([h-margin.bottom, margin.top])
 
-
 let svg = d3.select("#scatterplot")
     .attr("height", h + margin.top + margin.bottom)
     .attr("width", w + margin.left + margin.right)
 
+//need to fix all of these texts
+svg.append("text")
+    .attr("id", "title")
+    .text("Population and Area of Countries")
+    .attr("transform", "translate(400,50)")
+
+svg.append("text")
+    .attr("class", "big-growth")
+    .text("Growth Rate > 2")
+    .attr("transform", "translate(" + (w - margin.right) + ", 700)")
+    
+svg.append("text")
+    .attr("class", "medium-growth")
+    .text("Growth Rate 0 < x <= 2")
+    .attr("transform", "translate(" + (w - margin.right) + ", 725)")
+
+svg.append("text")
+    .attr("class", "low-growth")
+    .text("Growth Rate < 0")
+    .attr("transform", "translate(" + (w - margin.right) + ", 750)")
+
+// let brush = d3.brush()
+//     .on("end", brushed)
+    
+// svg.append("g")
+//     .attr("class", "brush")
+//     .call(brush)
+    
+// function brushed() {
+    
+// }
+
 d3.tsv("./data/countries.tsv", function (error, data) {
     if (error) throw error;
-    
+
     //this gives things better names and formats the numbers without commas
     data.forEach(function (d) {
         // d.rank = parseInt(d["#"]);
@@ -34,8 +65,13 @@ d3.tsv("./data/countries.tsv", function (error, data) {
         d.area = parseInt(d["Area(Km²)"].replace(/,/g, ''));
         // d.worldShare = parseInt(d["WorldShare"]);
     })
-    
-    let smallestPopulation = d3.min(data, d => d.population)    
+    drawScatterPlot(data)
+})
+
+function drawScatterPlot(data) {    
+    console.log("drawing")
+    console.log(data[0]);
+    let smallestPopulation = d3.min(data, d => d.population)
     let biggestPopulation = d3.max(data, d => d.population)
     
     let smallestArea = d3.min(data, d => d.area);
@@ -43,17 +79,8 @@ d3.tsv("./data/countries.tsv", function (error, data) {
 
     let smallestChange = d3.min(data, d => Math.abs(d.yearlyChange))
     let biggestChange = d3.max(data, d => d.yearlyChange)
-
-    // let smallestDensity = d3.min(data, function (d) {
-    //     return d.density;
-    // })
-    // let biggestDensity = d3.max(data, function (d) {
-    //     return d.density;
-    // })
-
-    // let quartileDensity = .25*(biggestDensity - smallestDensity);
-
-    //all domains based on data values
+    console.log(smallestPopulation, biggestPopulation, smallestArea, biggestArea)
+    
     xScale.domain([smallestPopulation * .9, biggestPopulation * 1.1]);
 
     let xAxis = d3.axisBottom(xScale)
@@ -62,15 +89,14 @@ d3.tsv("./data/countries.tsv", function (error, data) {
 
     svg.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0," + (h-margin.bottom) + ")")
+        .attr("transform", "translate(0," + (h - margin.bottom) + ")")
         .call(xAxis)
 
         .append("text")
         .attr("class", "label")
-        .attr("transform", "translate(" + (margin.left + w/2) + "," + 75+ ")")
+        .attr("transform", "translate(" + (margin.left + w / 2) + "," + 75 + ")")
         .text("Population")
     
-
     yScale.domain([smallestArea, biggestArea * 1.1]);
 
     let yAxis = d3.axisLeft(yScale)
@@ -84,13 +110,13 @@ d3.tsv("./data/countries.tsv", function (error, data) {
 
         .append("text")
         .attr("class", "label")
-        .attr("transform", "translate(" + -100 + "," + (h/2 - margin.top) + ") rotate(-90)")
-        .text("Area (Square Kilometers)")   
+        .attr("transform", "translate(" + -100 + "," + (h / 2 - margin.top) + ") rotate(-90)")
+        .text("Area (Square Kilometers)")
 
     //resize dots when there are more of them..this looks decent
     let rScale = d3.scaleLinear()
         .domain([smallestChange, biggestChange])
-        .range([(-.04*data.length+13), (-.04*data.length+18)])
+        .range([(-.04 * data.length + 13), (-.04 * data.length + 18)])
     
     let circle = svg.selectAll("circle")
         .data(data)
@@ -110,7 +136,7 @@ d3.tsv("./data/countries.tsv", function (error, data) {
                 return "medium-growth circle";
             }
         })
-        .on("mouseenter", function (d) { 
+        .on("mouseenter", function (d) {
             //only one tooltip on page..display:none when not in circle
             let tooltip = d3.select("#tooltip")
                 //this gives an unintended effect in which the tooltip moves from the last
@@ -145,13 +171,8 @@ d3.tsv("./data/countries.tsv", function (error, data) {
     //     .attr("y", function (d) { return yScale(d.area) })
 
     //     .text(function(d) { return d.name})
-})
+}
 
 
 
-    
-svg.append("text")
-    .attr("id", "title")
-    .text("Population and Area of the 25 Largest Countries")
-    .attr("transform", "translate(315,50)")
 
