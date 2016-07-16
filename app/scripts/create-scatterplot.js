@@ -20,42 +20,29 @@ let yScale = d3.scaleLog()
 let svg = d3.select("#scatterplot")
     .attr("height", h + margin.top + margin.bottom)
     .attr("width", w + margin.left + margin.right)
-    .style("border", "1px solid red")
 
 d3.tsv("./data/countries.tsv", function (error, data) {
     if (error) throw error;
     
     //this gives things better names and formats the numbers without commas
     data.forEach(function (d) {
-        d.rank = parseInt(d["#"]);
+        // d.rank = parseInt(d["#"]);
         d.name = d["Country (or dependency)"];
         d.population = parseInt(d["Population(2016)"].replace(/,/g, ''));
         d.yearlyChange = +d["YearlyChange"].replace(/\s%/, "");
         d.density = parseInt(d["Density(P/Km²)"].replace(/,/g, ''));
         d.area = parseInt(d["Area(Km²)"].replace(/,/g, ''));
-        d.worldShare = parseInt(d["WorldShare"]);
+        // d.worldShare = parseInt(d["WorldShare"]);
     })
     
-    let smallestPopulation = d3.min(data, function (d) {
-        return d.population;
-    })    
-    let biggestPopulation = d3.max(data, function (d) {
-        return d.population;
-    })
+    let smallestPopulation = d3.min(data, d => d.population)    
+    let biggestPopulation = d3.max(data, d => d.population)
     
-    let smallestArea = d3.min(data, function (d) {
-        return d.area;
-    });
-    let biggestArea = d3.max(data, function (d) {
-        return d.area;
-    })
+    let smallestArea = d3.min(data, d => d.area);
+    let biggestArea = d3.max(data, d => d.area)
 
-    let smallestChange = d3.min(data, function (d) {
-        return Math.abs(d.yearlyChange);
-    })
-    let biggestChange = d3.max(data, function (d) {
-        return Math.abs(d.yearlyChange);
-    })
+    let smallestChange = d3.min(data, d => Math.abs(d.yearlyChange))
+    let biggestChange = d3.max(data, d => d.yearlyChange)
 
     // let smallestDensity = d3.min(data, function (d) {
     //     return d.density;
@@ -103,27 +90,19 @@ d3.tsv("./data/countries.tsv", function (error, data) {
     //resize dots when there are more of them..this looks decent
     let rScale = d3.scaleLinear()
         .domain([smallestChange, biggestChange])
-        .range([(-.04*data.length+10), (-.04*data.length+15)])
+        .range([(-.04*data.length+10), (-.04*data.length+18)])
     
     let circle = svg.selectAll("circle")
         .data(data)
         .enter()
         .append("circle")
     
-    circle.attr("cx", function (d) {
-        return xScale(d.population);
-        })
-        .attr("cy", function (d) {
-            return yScale(d.area);
-        })
-        .attr("r", function (d) {
-            return rScale(Math.abs(d.yearlyChange));
-        })
-        .attr("pop", function (d) {
-            return d.population
-        })
+    circle.attr("cx", d => xScale(d.population))
+        .attr("cy", d => yScale(d.area))
+        .attr("r", d => rScale(Math.abs(d.yearlyChange)))
+        .attr("pop", d => d.population)
         .style("fill", function (d) {
-            if (d.yearlyChange < .5) {
+            if (d.yearlyChange < 0) {
                 return "red";
             } else if (d.yearlyChange > 2) {
                 return "green";
@@ -131,7 +110,41 @@ d3.tsv("./data/countries.tsv", function (error, data) {
                 return "yellow";
             }
         })
-        .on("mouseenter", function(d) { console.log(d)})
+        .on("mouseenter", function (d) { 
+            //only one tooltip on page..display:none when not in circle
+            let tooltip = d3.select("#tooltip")
+                //this gives an unintended effect in which the tooltip moves from the last
+                //selected to the new one. I think it actually looks pretty cool, but I'm
+                //not sure if it's right for this graph
+                .style("display", "block")
+                .transition()
+                .duration(300)
+
+                .style("top", event.pageY - 125 + "px")
+                .style("left", event.pageX - 105 + "px")
+                
+            //this sets all properties for the tooltip created in index.html
+            //probably not the best way to do it, but seems fairly clean
+            d3.select("#country-name").text(d.name)
+            d3.select("#area").text(d.area.toLocaleString())
+            d3.select("#population").text(d.population.toLocaleString())
+            d3.select("#change").text(d.yearlyChange)
+            d3.select("#density").text(d.density)
+                  
+        })
+        .on("mouseout", function (d) {
+            d3.select("#tooltip")
+                .style("display", "none")
+        })
+    // svg.selectAll("text.country-name")
+    //     .data(data)
+    //     .enter()
+    //     .append("text")
+    //     .attr("class", "country-name")
+    //     .attr("x", function (d) { console.log("hi"); return xScale(d.population) })
+    //     .attr("y", function (d) { return yScale(d.area) })
+
+    //     .text(function(d) { return d.name})
 })
 
 
