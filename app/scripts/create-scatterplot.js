@@ -90,7 +90,7 @@ d3.tsv("./data/countries.tsv", function (error, data) {
     //resize dots when there are more of them..this looks decent
     let rScale = d3.scaleLinear()
         .domain([smallestChange, biggestChange])
-        .range([(-.04*data.length+10), (-.04*data.length+18)])
+        .range([(-.04*data.length+13), (-.04*data.length+18)])
     
     let circle = svg.selectAll("circle")
         .data(data)
@@ -101,13 +101,13 @@ d3.tsv("./data/countries.tsv", function (error, data) {
         .attr("cy", d => yScale(d.area))
         .attr("r", d => rScale(Math.abs(d.yearlyChange)))
         .attr("pop", d => d.population)
-        .style("fill", function (d) {
+        .attr("class", function (d) {
             if (d.yearlyChange < 0) {
-                return "red";
+                return "low-growth circle";
             } else if (d.yearlyChange > 2) {
-                return "green";
+                return "big-growth circle";
             } else {
-                return "yellow";
+                return "medium-growth circle";
             }
         })
         .on("mouseenter", function (d) { 
@@ -120,8 +120,8 @@ d3.tsv("./data/countries.tsv", function (error, data) {
                 .transition()
                 .duration(300)
 
-                .style("top", event.pageY - 125 + "px")
-                .style("left", event.pageX - 105 + "px")
+                .style("top", event.pageY - 50 + "px")
+                .style("left", event.pageX - 205 + "px")
                 
             //this sets all properties for the tooltip created in index.html
             //probably not the best way to do it, but seems fairly clean

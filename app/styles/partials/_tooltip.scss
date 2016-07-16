@@ -5,6 +5,10 @@
     padding: 10px;
 
     color: white;
-    background-color: rgba(0,0,0,.6)
+    background-color: rgba(0,0,0,.7)
 }
 
+#tooltip>div {
+    display:block;
+    padding-top: 5px;
+}

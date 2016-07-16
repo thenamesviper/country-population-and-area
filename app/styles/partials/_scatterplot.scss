@@ -20,3 +20,19 @@ text{
 .label {
     font-size: 2em;
 }
+
+.circle {
+    stroke: black;
+    stroke-width: 2;
+}
+.low-growth {
+    fill: darkred;
+}
+
+.medium-growth {
+    fill: orange;
+}
+
+.big-growth {
+    fill: darkgreen;
+}
