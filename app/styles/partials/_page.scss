@@ -11,3 +11,39 @@ body {
 }
 
 
+#sources {
+    position: absolute;
+    margin-top:15px;
+    padding-left: 5px;
+    right: 0;
+    bottom: -15px;
+
+    display: none;
+    width: 50%;
+    box-sizing: border-box;
+    
+    background-color: lightgray;
+    cursor: pointer;
+}
+#portfolio,
+#sources-toggle {
+    float: left;
+    width: 50%;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 2em;
+    color: black;
+
+    a{
+        text-decoration: none;
+    }
+}
+#portfolio {
+    background-color: darkgray;
+}
+
+#sources-toggle {
+    background-color: lightgray;
+    cursor: pointer;
+}

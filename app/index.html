@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="">
+<html class = "no-js" lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>scatterplot</title>
+    <title>Population and Area of Countries</title>
 
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <!-- Place favicon.ico in the root directory -->
@@ -36,22 +36,32 @@
       
     </div>
     </div>
+    <div id = "sources">
+      Created for <a href = "www.freecodecamp.com">FreeCodeCamp</a><br/>
+      Created using a <a href = "http://yeoman.io/">Yeoman generator</a></br>
+      All data from <a href = "http://www.worldometers.info/world-population/population-by-country/">worldometers</a><br/>
+      Area seems to be based on land area only, doesn't quite match other sources. Vatican City given area of 1 to avoid logarithmic problems<br/>
+      GitHub for project <a href = "https://github.com/thenamesviper/country-population-and-area">found here</a><br/>
+      Favicon made with (and using an image) from <a href = "http://www.favicon-generator.org/">favicon-generator.org</a><br/>
+      Background image from pixabay. Found at <a href = "https://pixabay.com/en/map-map-of-the-world-relief-map-221210/">this address</a>
+    </div>
+    <div id = "footer">
+      <a href = "http://codepen.io/thenamesviper/full/grWNeJ/"><div id = "portfolio">Portfolio</div></a>
+      <div id = "sources-toggle">Sources</div>
+    </div>
     
-
+<script src="https://d3js.org/d3.v4.min.js"></script>
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
     <script src="/bower_components/jquery/dist/jquery.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
-    <script src="https://d3js.org/d3.v4.min.js"></script>
 
     <!-- build:js scripts/combined.js -->
-    <script src = "scripts/create-scatterplot.js"></script>
+    <script src="scripts/sources-interact.js"></script>
+    <script src="scripts/create-scatterplot.js"></script>
     <!-- endbuild -->
     
-    <!-- build:js scripts/main.js -->
-    <!--<script src="scripts/main.js"></script>  c/o by me-->
-    <!-- endbuild -->
   </body>
 </html>
